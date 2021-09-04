@@ -1,0 +1,8 @@
+package br.ce.wcaquino.servicos;
+
+public class Snippet {
+	public static void main(String[] args) {
+		br.ce.wcaquino.servicos
+	}
+}
+
