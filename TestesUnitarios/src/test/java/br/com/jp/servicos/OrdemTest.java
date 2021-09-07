@@ -1,0 +1,37 @@
+package br.com.jp.servicos;
+
+import org.junit.Assert;
+import org.junit.Test;
+
+/**
+ * 
+ * @author joaop
+ * Preciso garantir a ordem de execucao dos testes porem o junit nao consegue garantir isso automaticamente
+ */
+public class OrdemTest {
+	
+	private static int contador = 0;
+	
+	//@Test
+	public void inicia() {
+		contador = 1;
+	}
+	
+	//@Test
+	public void verifica() {
+		Assert.assertEquals(1, contador);
+	}
+	
+	/**
+	 * Uma forma de resolver o problema seria essa
+	 * os metodos inicia e verifica deixam de estar anotados com @Test
+	 * e sao chamados em um outro metodo que chama os metodos na ordem desejada
+	 * desta forma perde a rastreabilidade do teste
+	 */
+	
+	@Test
+	public void testeGeral() {
+		inicia();
+		verifica();
+	}
+}
