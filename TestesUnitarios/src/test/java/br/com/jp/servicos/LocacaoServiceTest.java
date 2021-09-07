@@ -9,7 +9,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.After;
@@ -76,30 +78,22 @@ public class LocacaoServiceTest {
 		System.out.println("Teste");
 		
 		//cenario
+		
 		Usuario usuario = new Usuario("Usuario 1");
 		Filme filme = new Filme("Filme 1", 2, 5.0);
+		List<Filme> filmes = new ArrayList<Filme>();
+		filmes.add(filme);
 		
 		//acao
 		Locacao locacao;
-			locacao = service.alugarFilme(usuario, filme);
+		locacao = service.alugarFilme(usuario, filmes);
 			
-			//verificacao
-//			assertEquals(5.0, locacao.getValor(), 0.01);
-//			assertTrue(DataUtils.isMesmaData(locacao.getDataLocacao(), new Date()));
-//			assertTrue(DataUtils.isMesmaData(locacao.getDataRetorno(), DataUtils.obterDataComDiferencaDias(1)));
-//			
-//			//assertThat
-//			assertThat(locacao.getValor(), is(equalTo(5.0)));
-//			assertThat(locacao.getValor(), is(not(6.0)));
-//			assertThat(DataUtils.isMesmaData(locacao.getDataLocacao(), new Date()), is(true));
-//			assertThat(DataUtils.isMesmaData(locacao.getDataRetorno(), DataUtils.obterDataComDiferencaDias(1)), is(true));
+		//verificacao
 			
-			//ErrorCollector
-			error.checkThat(locacao.getValor(), is(equalTo(5.0)));
-			error.checkThat(DataUtils.isMesmaData(locacao.getDataLocacao(), new Date()), is(true));
-			error.checkThat(DataUtils.isMesmaData(locacao.getDataRetorno(), DataUtils.obterDataComDiferencaDias(1)), is(true));
-		
-		
+		//ErrorCollector
+		error.checkThat(locacao.getValor(), is(equalTo(5.0)));
+		error.checkThat(DataUtils.isMesmaData(locacao.getDataLocacao(), new Date()), is(true));
+		error.checkThat(DataUtils.isMesmaData(locacao.getDataRetorno(), DataUtils.obterDataComDiferencaDias(1)), is(true));
 	}
 	
 	//teste esperando uma exception
@@ -107,8 +101,10 @@ public class LocacaoServiceTest {
 	public void testLocacao_filmeSemEstoque() throws Exception {
 		Usuario usuario = new Usuario("Usuario 1");
 		Filme filme = new Filme("Filme 1", 0, 5.0);
+		List<Filme> filmes = new ArrayList<Filme>();
+		filmes.add(filme);
 		
-		service.alugarFilme(usuario, filme);
+		service.alugarFilme(usuario, filmes);
 		
 	}
 	
@@ -147,10 +143,12 @@ public class LocacaoServiceTest {
 		//cenario
 		Filme filme = new Filme("Filme 1", 1, 5.0);
 		//Usuario usuario = new Usuario("Usuario 1");
+		List<Filme> filmes = new ArrayList<Filme>();
+		filmes.add(filme);
 		
 		//acao
 		try {
-			service.alugarFilme(null, filme);
+			service.alugarFilme(null, filmes);
 			Assert.fail();
 		} catch (LocadoraException e) {
 			
