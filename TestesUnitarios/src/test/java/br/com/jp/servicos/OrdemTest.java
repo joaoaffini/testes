@@ -1,24 +1,29 @@
 package br.com.jp.servicos;
 
 import org.junit.Assert;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 
 /**
  * 
  * @author joaop
  * Preciso garantir a ordem de execucao dos testes porem o junit nao consegue garantir isso automaticamente
+ * com a anotacao @FixMethodOrder(MethodSorters.NAME_ASCENDING) = os metodos sao executados em ordem alfabetica
+ * de acordo com o nome do metodo
  */
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class OrdemTest {
 	
 	private static int contador = 0;
 	
-	//@Test
-	public void inicia() {
+	@Test
+	public void t1_inicia() {
 		contador = 1;
 	}
 	
-	//@Test
-	public void verifica() {
+	@Test
+	public void t2_verifica() {
 		Assert.assertEquals(1, contador);
 	}
 	
@@ -29,9 +34,9 @@ public class OrdemTest {
 	 * desta forma perde a rastreabilidade do teste
 	 */
 	
-	@Test
-	public void testeGeral() {
-		inicia();
-		verifica();
-	}
+//	@Test
+//	public void testeGeral() {
+//		inicia();
+//		verifica();
+//	}
 }
