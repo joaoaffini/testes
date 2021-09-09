@@ -22,6 +22,7 @@ public class DiaSemanaMatcher extends TypeSafeMatcher<Date> {
 		Calendar data = Calendar.getInstance();
 		data.set(Calendar.DAY_OF_WEEK, diaSemana);
 		String dataExtenso = data.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, new Locale("pt", "BR"));
+		description.appendText(dataExtenso);
 	}
 
 	@Override
