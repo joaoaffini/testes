@@ -2,6 +2,7 @@ package br.com.jp.servicos;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,6 +23,7 @@ import br.com.jp.entidades.Locacao;
 import br.com.jp.entidades.Usuario;
 import br.com.jp.exceptions.FilmeSemEstoqueException;
 import br.com.jp.exceptions.LocadoraException;
+import br.com.jp.servicos.matchers.MatchersProprios;
 import br.com.jp.utils.DataUtils;
 
 public class LocadoraTestTDD {
@@ -147,12 +149,11 @@ public class LocadoraTestTDD {
 		
 		//verificacao
 		
-		if(DataUtils.verificarDiaSemana(new Date(), Calendar.SATURDAY)) {
-			
-			boolean ehSegunda = DataUtils.verificarDiaSemana(retorno.getDataRetorno(), Calendar.MONDAY);
-			
-			Assert.assertTrue(ehSegunda);
-		}
+		boolean ehSegunda = DataUtils.verificarDiaSemana(retorno.getDataRetorno(), Calendar.MONDAY);
+		Assert.assertTrue(ehSegunda);
+		
+		assertThat(retorno.getDataRetorno(), MatchersProprios.caiEm(Calendar.MONDAY));
+		assertThat(retorno.getDataRetorno(), MatchersProprios.caiEmUmaSegunda());
 		
 	}
 
