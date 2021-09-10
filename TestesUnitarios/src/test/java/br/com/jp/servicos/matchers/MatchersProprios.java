@@ -8,7 +8,15 @@ public class MatchersProprios {
 		return new DiaSemanaMatcher(diaSemana);
 	}
 
-	public static DiaSemanaMatcher	 caiEmUmaSegunda() {
+	public static DiaSemanaMatcher caiEmUmaSegunda() {
 		return new DiaSemanaMatcher(Calendar.MONDAY);
+	}
+	
+	public static DataDiferencaDiasMatcher ehHoje() {
+		return new DataDiferencaDiasMatcher(0);
+	}
+	
+	public static DataDiferencaDiasMatcher ehHojeComDiferencaDias(Integer qtdeDias) {
+		return new DataDiferencaDiasMatcher(qtdeDias);
 	}
 }

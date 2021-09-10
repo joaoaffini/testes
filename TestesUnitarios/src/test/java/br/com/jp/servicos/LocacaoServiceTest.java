@@ -30,6 +30,7 @@ import br.com.jp.entidades.Usuario;
 import br.com.jp.exceptions.FilmeSemEstoqueException;
 import br.com.jp.exceptions.LocadoraException;
 import br.com.jp.servicos.LocacaoService;
+import br.com.jp.servicos.matchers.MatchersProprios;
 import br.com.jp.utils.DataUtils;
 
 public class LocacaoServiceTest {
@@ -93,7 +94,10 @@ public class LocacaoServiceTest {
 		//ErrorCollector
 		error.checkThat(locacao.getValor(), is(equalTo(5.0)));
 		error.checkThat(DataUtils.isMesmaData(locacao.getDataLocacao(), new Date()), is(true));
+		error.checkThat(locacao.getDataLocacao(), MatchersProprios.ehHoje());
 		error.checkThat(DataUtils.isMesmaData(locacao.getDataRetorno(), DataUtils.obterDataComDiferencaDias(1)), is(true));
+		
+		error.checkThat(locacao.getDataRetorno(), MatchersProprios.ehHojeComDiferencaDias(1));
 	}
 	
 	//teste esperando uma exception

@@ -7,6 +7,8 @@ import java.util.Locale;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
 
+import br.com.jp.utils.DataUtils;
+
 //o tipo do generics TypeSafeMatcher eh o mesmo tipo que vai no primeiro parametro do matcher
 public class DiaSemanaMatcher extends TypeSafeMatcher<Date> {
 	
@@ -26,9 +28,8 @@ public class DiaSemanaMatcher extends TypeSafeMatcher<Date> {
 	}
 
 	@Override
-	protected boolean matchesSafely(Date item) {
-		// TODO Auto-generated method stub
-		return false;
+	protected boolean matchesSafely(Date data) {
+		return DataUtils.verificarDiaSemana(data, diaSemana);
 	}
 
 }
