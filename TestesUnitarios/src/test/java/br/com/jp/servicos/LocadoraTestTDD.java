@@ -23,6 +23,8 @@ import br.com.jp.entidades.Locacao;
 import br.com.jp.entidades.Usuario;
 import br.com.jp.exceptions.FilmeSemEstoqueException;
 import br.com.jp.exceptions.LocadoraException;
+import br.com.jp.servicos.builders.FilmeBuilder;
+import br.com.jp.servicos.builders.UsuarioBuilder;
 import br.com.jp.servicos.matchers.MatchersProprios;
 import br.com.jp.utils.DataUtils;
 
@@ -46,8 +48,8 @@ public class LocadoraTestTDD {
 		
 		//cenario
 		
-		Usuario usuario = new Usuario("Usuario 1");
-		Filme filme = new Filme("Filme 1", 2, 5.0);
+		Usuario usuario = UsuarioBuilder.umUsuario().agora();
+		Filme filme = FilmeBuilder.umFilme().comValor(5.0).agora();
 		List<Filme> filmes = new ArrayList<Filme>();
 		filmes.add(filme);
 		
@@ -66,11 +68,11 @@ public class LocadoraTestTDD {
 	@Test
 	public void devePagar75PcFilme() throws FilmeSemEstoqueException, LocadoraException {
 		
-		Filme filme1 = new Filme("Filme 1", 5, 4.0);
-		Filme filme2 = new Filme("Filme 2", 5, 4.0);
-		Filme filme3 = new Filme("Filme 3", 5, 4.0);
+		Filme filme1 = FilmeBuilder.umFilme().agora();
+		Filme filme2 = FilmeBuilder.umFilme().agora();
+		Filme filme3 = FilmeBuilder.umFilme().agora();
 		
-		Usuario usuario = new Usuario("Usuario 1");
+		Usuario usuario = UsuarioBuilder.umUsuario().agora();
 		
 		List<Filme> filmes = Arrays.asList(filme1, filme2, filme3);
 		
@@ -82,12 +84,12 @@ public class LocadoraTestTDD {
 	@Test
 	public void devePagar50PcFilme() throws FilmeSemEstoqueException, LocadoraException {
 		
-		Filme filme1 = new Filme("Filme 1", 5, 4.0);
-		Filme filme2 = new Filme("Filme 2", 5, 4.0);
-		Filme filme3 = new Filme("Filme 3", 5, 4.0);
-		Filme filme4 = new Filme("Filme 4", 5, 4.0);
+		Filme filme1 = FilmeBuilder.umFilme().agora();
+		Filme filme2 = FilmeBuilder.umFilme().agora();
+		Filme filme3 = FilmeBuilder.umFilme().agora();
+		Filme filme4 = FilmeBuilder.umFilme().agora();
 		
-		Usuario usuario = new Usuario("Usuario 1");
+		Usuario usuario = UsuarioBuilder.umUsuario().agora();
 		
 		List<Filme> filmes = Arrays.asList(filme1, filme2, filme3, filme4);
 		
@@ -99,13 +101,13 @@ public class LocadoraTestTDD {
 	@Test
 	public void devePagar25PcFilme() throws FilmeSemEstoqueException, LocadoraException {
 		
-		Filme filme1 = new Filme("Filme 1", 5, 4.0);
-		Filme filme2 = new Filme("Filme 2", 5, 4.0);
-		Filme filme3 = new Filme("Filme 3", 5, 4.0);
-		Filme filme4 = new Filme("Filme 4", 5, 4.0);
-		Filme filme5 = new Filme("Filme 5", 5, 4.0);
+		Filme filme1 = FilmeBuilder.umFilme().agora();
+		Filme filme2 = FilmeBuilder.umFilme().agora();
+		Filme filme3 = FilmeBuilder.umFilme().agora();
+		Filme filme4 = FilmeBuilder.umFilme().agora();
+		Filme filme5 = FilmeBuilder.umFilme().agora();
 		
-		Usuario usuario = new Usuario("Usuario 1");
+		Usuario usuario  = UsuarioBuilder.umUsuario().agora();
 		
 		List<Filme> filmes = Arrays.asList(filme1, filme2, filme3, filme4, filme5);
 		
@@ -117,14 +119,14 @@ public class LocadoraTestTDD {
 	@Test
 	public void devePagar0PcFilme() throws FilmeSemEstoqueException, LocadoraException {
 		
-		Filme filme1 = new Filme("Filme 1", 5, 4.0);
-		Filme filme2 = new Filme("Filme 2", 5, 4.0);
-		Filme filme3 = new Filme("Filme 3", 5, 4.0);
-		Filme filme4 = new Filme("Filme 4", 5, 4.0);
-		Filme filme5 = new Filme("Filme 5", 5, 4.0);
-		Filme filme6 = new Filme("Filme 6", 5, 4.0);
+		Filme filme1 = FilmeBuilder.umFilme().agora();
+		Filme filme2 = FilmeBuilder.umFilme().agora();
+		Filme filme3 = FilmeBuilder.umFilme().agora();
+		Filme filme4 = FilmeBuilder.umFilme().agora();
+		Filme filme5 = FilmeBuilder.umFilme().agora();
+		Filme filme6 = FilmeBuilder.umFilme().agora();
 		
-		Usuario usuario = new Usuario("Usuario 1");
+		Usuario usuario = UsuarioBuilder.umUsuario().agora();
 		
 		List<Filme> filmes = Arrays.asList(filme1, filme2, filme3, filme4, filme5, filme6);
 		
@@ -140,9 +142,9 @@ public class LocadoraTestTDD {
 		Assume.assumeTrue(DataUtils.verificarDiaSemana(new Date(), Calendar.SATURDAY));
 		
 		//cenario
-		Filme filme1 = new Filme("Filme 1", 5, 4.0);
+		Filme filme1 = FilmeBuilder.umFilme().agora();
 		List<Filme> filmes = Arrays.asList(filme1);
-		Usuario usuario = new Usuario("Usuario 1");
+		Usuario usuario = UsuarioBuilder.umUsuario().agora();
 		
 		//acao
 		Locacao retorno = service.alugarFilme(usuario, filmes);
