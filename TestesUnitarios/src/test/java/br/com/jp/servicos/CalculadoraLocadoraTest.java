@@ -13,7 +13,10 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameter;
 import org.junit.runners.Parameterized.Parameters;
+import org.mockito.Mockito;
 
+import br.com.jp.dao.LocacaoDAO;
+import br.com.jp.dao.LocacaoDAOFake;
 import br.com.jp.entidades.Filme;
 import br.com.jp.entidades.Locacao;
 import br.com.jp.entidades.Usuario;
@@ -45,6 +48,10 @@ public class CalculadoraLocadoraTest {
 	@Before
 	public void setup() {
 		service = new LocacaoService();
+		LocacaoDAO dao = Mockito.mock(LocacaoDAO.class);
+		service.setLocacaoDao(dao);
+		SPCService spcService = Mockito.mock(SPCService.class);
+		service.setSPCService(spcService);
 	}
 	
 	//cada item no array dispara uma execucao dos testes que utilizam os parametros

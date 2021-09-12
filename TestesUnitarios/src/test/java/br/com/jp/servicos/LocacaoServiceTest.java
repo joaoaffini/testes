@@ -4,16 +4,12 @@ package br.com.jp.servicos;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.hamcrest.CoreMatchers;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -23,13 +19,14 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ErrorCollector;
 import org.junit.rules.ExpectedException;
+import org.mockito.Mockito;
 
+import br.com.jp.dao.LocacaoDAO;
 import br.com.jp.entidades.Filme;
 import br.com.jp.entidades.Locacao;
 import br.com.jp.entidades.Usuario;
 import br.com.jp.exceptions.FilmeSemEstoqueException;
 import br.com.jp.exceptions.LocadoraException;
-import br.com.jp.servicos.LocacaoService;
 import br.com.jp.servicos.matchers.MatchersProprios;
 import br.com.jp.utils.DataUtils;
 
@@ -51,6 +48,10 @@ public class LocacaoServiceTest {
 	public void setup() {
 		System.out.println("Before");
 		service = new LocacaoService();
+		LocacaoDAO dao = Mockito.mock(LocacaoDAO.class);
+		service.setLocacaoDao(dao);
+		SPCService spcService = Mockito.mock(SPCService.class);
+		service.setSPCService(spcService);
 	}
 	
 	@After
