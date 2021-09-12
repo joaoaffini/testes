@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.hamcrest.CoreMatchers;
+import org.hamcrest.Matcher;
 import org.junit.Assert;
 import org.junit.Assume;
 import org.junit.Before;
@@ -28,6 +29,7 @@ import br.com.jp.entidades.Usuario;
 import br.com.jp.exceptions.FilmeSemEstoqueException;
 import br.com.jp.exceptions.LocadoraException;
 import br.com.jp.servicos.builders.FilmeBuilder;
+import br.com.jp.servicos.builders.LocacaoBuilder;
 import br.com.jp.servicos.builders.UsuarioBuilder;
 import br.com.jp.servicos.matchers.MatchersProprios;
 import br.com.jp.utils.DataUtils;
@@ -37,6 +39,7 @@ public class LocadoraTestTDD {
 	private LocacaoService service;
 	private SPCService spcService;
 	private LocacaoDAO dao;
+	private EmailService emailService;
 	
 	
 	@Rule
@@ -54,6 +57,8 @@ public class LocadoraTestTDD {
 		service.setLocacaoDao(dao);
 		spcService = Mockito.mock(SPCService.class);
 		service.setSPCService(spcService);
+		emailService = Mockito.mock(EmailService.class);
+		service.setEmailService(emailService);
 	}
 	
 	@Test
@@ -175,19 +180,49 @@ public class LocadoraTestTDD {
 	}
 	
 	@Test
-	public void naoDeveAlugarFilmeParaNegativadoSPC() throws FilmeSemEstoqueException, LocadoraException {
+	public void naoDeveAlugarFilmeParaNegativadoSPC() throws FilmeSemEstoqueException {
 		//cenario
 		Usuario usuario = UsuarioBuilder.umUsuario().agora();
+		//Usuario usuario2 = UsuarioBuilder.umUsuario().comNome("Usuario 2").agora();
 		List<Filme> filmes = Arrays.asList(FilmeBuilder.umFilme().agora());
 		
 		Mockito.when(spcService.possuiNegativacao(usuario)).thenReturn(true);
 		
-		expectedException.expect(LocadoraException.class);
-		expectedException.expectMessage("Usuário Negativado");
+		//retirado este codigo para tratar com try catch e poder continuar a execucao do teste apos o erro lancado
+		//expectedException.expect(LocadoraException.class);
+		//expectedException.expectMessage("Usuário Negativado");
 		
 		//acao
-		spcService.possuiNegativacao(usuario);
-		service.alugarFilme(usuario, filmes);
+		try {
+			service.alugarFilme(usuario, filmes);
+			//caso o teste nao lance uma exception o teste deve falhar e nao retornar um falso positivo
+			Assert.fail();
+		} catch (LocadoraException e) {
+			Assert.assertThat(e.getMessage(), CoreMatchers.is("Usuário Negativado"));
+		}
+		
+		//verficacao
+		Mockito.verify(spcService).possuiNegativacao(usuario);
+	}
+	
+	@Test
+	public void deveEnviarEmailLocacoesAtrasadas() {
+		
+		//cenario
+		List<Locacao> locacoes = Arrays.asList(LocacaoBuilder.umaLocacao()
+				.comDataRetorno(DataUtils.obterDataComDiferencaDias(-2)).agora());
+		
+		//Quando o metodo dao.obterLocacoesPendentes() ele vai retornar a list locacoes
+		Mockito.when(dao.obterLocacoesPendentes()).thenReturn(locacoes);
+		
+		//acao
+		service.notificarAtrasos();
+		
+		//verificacao
+		for (Locacao locacao : locacoes) {
+			Mockito.verify(emailService).notificarAtraso(locacao.getUsuario());
+		}
+		
 	}
 
 }
