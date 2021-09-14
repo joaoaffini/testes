@@ -3,6 +3,9 @@ package br.com.jp.servicos;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -186,7 +189,8 @@ public class LocadoraTestTDD {
 		//Usuario usuario2 = UsuarioBuilder.umUsuario().comNome("Usuario 2").agora();
 		List<Filme> filmes = Arrays.asList(FilmeBuilder.umFilme().agora());
 		
-		Mockito.when(spcService.possuiNegativacao(usuario)).thenReturn(true);
+		//Mockito.any(Usuario.class) = significa que o mock retorna true para qualquer usuario
+		Mockito.when(spcService.possuiNegativacao(Mockito.any(Usuario.class))).thenReturn(true);
 		
 		//retirado este codigo para tratar com try catch e poder continuar a execucao do teste apos o erro lancado
 		//expectedException.expect(LocadoraException.class);
@@ -209,8 +213,13 @@ public class LocadoraTestTDD {
 	public void deveEnviarEmailLocacoesAtrasadas() {
 		
 		//cenario
-		List<Locacao> locacoes = Arrays.asList(LocacaoBuilder.umaLocacao()
-				.comDataRetorno(DataUtils.obterDataComDiferencaDias(-2)).agora());
+		Usuario usuario = UsuarioBuilder.umUsuario().agora();
+		Usuario usuario2 = UsuarioBuilder.umUsuario().comNome("Usuario em dia").agora();
+		Usuario usuario3 = UsuarioBuilder.umUsuario().comNome("Usuario3").agora();
+		List<Locacao> locacoes = Arrays.asList(LocacaoBuilder.umaLocacao().atrasado().comUsuario(usuario).agora(),
+											   LocacaoBuilder.umaLocacao().comUsuario(usuario2).agora(),
+											   LocacaoBuilder.umaLocacao().atrasado().comUsuario(usuario3).agora(),
+											   LocacaoBuilder.umaLocacao().atrasado().comUsuario(usuario3).agora());
 		
 		//Quando o metodo dao.obterLocacoesPendentes() ele vai retornar a list locacoes
 		Mockito.when(dao.obterLocacoesPendentes()).thenReturn(locacoes);
@@ -219,9 +228,15 @@ public class LocadoraTestTDD {
 		service.notificarAtrasos();
 		
 		//verificacao
-		for (Locacao locacao : locacoes) {
-			Mockito.verify(emailService).notificarAtraso(locacao.getUsuario());
-		}
+		//Verifica se foi chamado 3 vezes para um usuario
+		Mockito.verify(emailService, times(3)).notificarAtraso(Mockito.any(Usuario.class));
+		Mockito.verify(emailService).notificarAtraso(usuario);
+		Mockito.verify(emailService, Mockito.atLeastOnce()).notificarAtraso(usuario3);
+		Mockito.verify(emailService, never()).notificarAtraso(usuario2);
+		
+		//significa que se algum usuario que nao estiver no verify acima entrou no metodo para enviar email
+		//ele vai dar erro nos testes
+		Mockito.verifyNoMoreInteractions(emailService);
 		
 	}
 
