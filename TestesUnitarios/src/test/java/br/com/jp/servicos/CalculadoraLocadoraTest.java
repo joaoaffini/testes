@@ -13,7 +13,10 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameter;
 import org.junit.runners.Parameterized.Parameters;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 
 import br.com.jp.dao.LocacaoDAO;
 import br.com.jp.dao.LocacaoDAOFake;
@@ -26,7 +29,14 @@ import br.com.jp.exceptions.LocadoraException;
 @RunWith(Parameterized.class)
 public class CalculadoraLocadoraTest {
 	
+	@InjectMocks
 	private LocacaoService service;
+	
+	@Mock
+	private LocacaoDAO dao;
+	
+	@Mock
+	private SPCService spcService;
 	
 	private static Filme filme1 = new Filme("Filme 1", 5, 4.0);
 	private static Filme filme2 = new Filme("Filme 2", 5, 4.0);
@@ -47,11 +57,12 @@ public class CalculadoraLocadoraTest {
 	
 	@Before
 	public void setup() {
-		service = new LocacaoService();
-		LocacaoDAO dao = Mockito.mock(LocacaoDAO.class);
-		service.setLocacaoDao(dao);
-		SPCService spcService = Mockito.mock(SPCService.class);
-		service.setSPCService(spcService);
+		MockitoAnnotations.initMocks(this);
+//		service = new LocacaoService();
+//		LocacaoDAO dao = Mockito.mock(LocacaoDAO.class);
+//		service.setLocacaoDao(dao);
+//		SPCService spcService = Mockito.mock(SPCService.class);
+//		service.setSPCService(spcService);
 	}
 	
 	//cada item no array dispara uma execucao dos testes que utilizam os parametros

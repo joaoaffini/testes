@@ -19,7 +19,10 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ErrorCollector;
 import org.junit.rules.ExpectedException;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 
 import br.com.jp.dao.LocacaoDAO;
 import br.com.jp.entidades.Filme;
@@ -34,7 +37,14 @@ public class LocacaoServiceTest {
 	
 	private static Integer contTests;
 	
+	@InjectMocks
 	private LocacaoService service;
+	
+	@Mock
+	private LocacaoDAO dao;
+	
+	@Mock
+	private SPCService spcService;
 	
 	//Esse ErrorCollector captura todos os erros que ocorreram.
 	//sem ele o teste para no primeiro erro encontrado e não executa as proximas linhas
@@ -47,11 +57,12 @@ public class LocacaoServiceTest {
 	@Before
 	public void setup() {
 		System.out.println("Before");
-		service = new LocacaoService();
-		LocacaoDAO dao = Mockito.mock(LocacaoDAO.class);
-		service.setLocacaoDao(dao);
-		SPCService spcService = Mockito.mock(SPCService.class);
-		service.setSPCService(spcService);
+		MockitoAnnotations.initMocks(this);
+		//service = new LocacaoService();
+//		LocacaoDAO dao = Mockito.mock(LocacaoDAO.class);
+//		service.setLocacaoDao(dao);
+//		SPCService spcService = Mockito.mock(SPCService.class);
+//		service.setSPCService(spcService);
 	}
 	
 	@After

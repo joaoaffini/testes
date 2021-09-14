@@ -22,7 +22,10 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ErrorCollector;
 import org.junit.rules.ExpectedException;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 
 import br.com.jp.dao.LocacaoDAO;
 import br.com.jp.dao.LocacaoDAOFake;
@@ -39,9 +42,15 @@ import br.com.jp.utils.DataUtils;
 
 public class LocadoraTestTDD {
 	
+	@InjectMocks
 	private LocacaoService service;
+	
+	
+	@Mock
 	private SPCService spcService;
+	@Mock
 	private LocacaoDAO dao;
+	@Mock
 	private EmailService emailService;
 	
 	
@@ -54,14 +63,16 @@ public class LocadoraTestTDD {
 	@Before
 	public void setup() {
 		
-		service = new LocacaoService();
-		dao = Mockito.mock(LocacaoDAO.class);
-		//LocacaoDAO dao = new LocacaoDAOFake();
-		service.setLocacaoDao(dao);
-		spcService = Mockito.mock(SPCService.class);
-		service.setSPCService(spcService);
-		emailService = Mockito.mock(EmailService.class);
-		service.setEmailService(emailService);
+		MockitoAnnotations.initMocks(this);
+		
+//		service = new LocacaoService();
+//		dao = Mockito.mock(LocacaoDAO.class);
+//		//LocacaoDAO dao = new LocacaoDAOFake();
+//		service.setLocacaoDao(dao);
+//		spcService = Mockito.mock(SPCService.class);
+//		service.setSPCService(spcService);
+//		emailService = Mockito.mock(EmailService.class);
+//		service.setEmailService(emailService);
 	}
 	
 	@Test
