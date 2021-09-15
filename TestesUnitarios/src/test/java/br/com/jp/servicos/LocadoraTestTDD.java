@@ -71,6 +71,7 @@ public class LocadoraTestTDD {
 	public void setup() {
 		
 		MockitoAnnotations.initMocks(this);
+		service = PowerMockito.spy(service);
 		
 //		service = new LocacaoService();
 //		dao = Mockito.mock(LocacaoDAO.class);
@@ -322,6 +323,27 @@ public class LocadoraTestTDD {
 		error.checkThat(locacaoRetornada.getDataLocacao(), MatchersProprios.ehHoje());
 		error.checkThat(locacaoRetornada.getDataRetorno(), MatchersProprios.ehHojeComDiferencaDias(3));
 		
+	}
+	
+	@Test
+	public void deveAlugarFilmeSemCalcularValor() throws Exception {
+		
+		//cenario
+		Usuario usuario = UsuarioBuilder.umUsuario().agora();
+		List<Filme> filmes = Arrays.asList(FilmeBuilder.umFilme().agora());
+		
+		//mock de metodo privado
+		PowerMockito.doReturn(1.0).when(service, "calcularValorLocacao", filmes);
+		
+		
+		//acao
+		Locacao locacao = service.alugarFilme(usuario, filmes);
+		
+		//verificacao
+		Assert.assertThat(locacao.getValor(), CoreMatchers.is(1.0));
+		
+		//verificar se um metodo privado foi chamado
+		PowerMockito.verifyPrivate(service).invoke("calcularValorLocacao", filmes);
 	}
 
 }
