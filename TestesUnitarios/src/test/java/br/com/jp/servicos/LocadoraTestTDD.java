@@ -332,7 +332,8 @@ public class LocadoraTestTDD {
 		Usuario usuario = UsuarioBuilder.umUsuario().agora();
 		List<Filme> filmes = Arrays.asList(FilmeBuilder.umFilme().agora());
 		
-		//mock de metodo privado
+		//mock de metodo privado utilizando o spy do powermock
+		//no metodo setup esta configurado o spy para a classe service
 		PowerMockito.doReturn(1.0).when(service, "calcularValorLocacao", filmes);
 		
 		
