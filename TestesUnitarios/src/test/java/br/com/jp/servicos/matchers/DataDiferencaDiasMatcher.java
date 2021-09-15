@@ -1,5 +1,7 @@
 package br.com.jp.servicos.matchers;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.hamcrest.Description;
@@ -17,7 +19,10 @@ public class DataDiferencaDiasMatcher extends TypeSafeMatcher<Date> {
 	
 	//descricao que sera exibida qdo o teste falhar
 	public void describeTo(Description description) {
-		// TODO Auto-generated method stub
+		Date dataEsperada = DataUtils.obterDataComDiferencaDias(qtdeDias);
+		DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+		
+		description.appendText(df.format(dataEsperada));
 
 	}
 
