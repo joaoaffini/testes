@@ -4,6 +4,6 @@ import br.com.jp.entidades.Usuario;
 
 public interface SPCService {
 	
-	public boolean possuiNegativacao(Usuario usu);
+	public boolean possuiNegativacao(Usuario usu) throws Exception;
 
 }

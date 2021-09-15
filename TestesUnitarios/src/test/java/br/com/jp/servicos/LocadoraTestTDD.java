@@ -194,7 +194,7 @@ public class LocadoraTestTDD {
 	}
 	
 	@Test
-	public void naoDeveAlugarFilmeParaNegativadoSPC() throws FilmeSemEstoqueException {
+	public void naoDeveAlugarFilmeParaNegativadoSPC() throws Exception {
 		//cenario
 		Usuario usuario = UsuarioBuilder.umUsuario().agora();
 		//Usuario usuario2 = UsuarioBuilder.umUsuario().comNome("Usuario 2").agora();
@@ -248,6 +248,24 @@ public class LocadoraTestTDD {
 		//significa que se algum usuario que nao estiver no verify acima entrou no metodo para enviar email
 		//ele vai dar erro nos testes
 		Mockito.verifyNoMoreInteractions(emailService);
+		
+	}
+	
+	@Test
+	public void deveTratarErroSPC() throws Exception {
+		//cenario
+		Usuario usuario = UsuarioBuilder.umUsuario().agora();
+		List<Filme> filmes = Arrays.asList(FilmeBuilder.umFilme().agora());
+
+		Mockito.when(spcService.possuiNegativacao(usuario)).thenThrow(new Exception("Falha Catastrófica"));
+		
+		//verificacao
+		expectedException.expect(LocadoraException.class);
+		expectedException.expectMessage("Problemas com SPC, tente novamente");
+		
+		//acao
+		service.alugarFilme(usuario, filmes);
+		
 		
 	}
 
