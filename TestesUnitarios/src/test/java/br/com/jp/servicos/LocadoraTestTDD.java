@@ -31,6 +31,7 @@ import org.mockito.MockitoAnnotations;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+import org.powermock.reflect.Whitebox;
 
 import br.com.jp.dao.LocacaoDAO;
 import br.com.jp.dao.LocacaoDAOFake;
@@ -345,6 +346,22 @@ public class LocadoraTestTDD {
 		
 		//verificar se um metodo privado foi chamado
 		PowerMockito.verifyPrivate(service).invoke("calcularValorLocacao", filmes);
+	}
+	
+	@Test
+	public void deveCalcularValorLocacao() throws Exception {
+		//cenario
+		List<Filme> filmes = Arrays.asList(FilmeBuilder.umFilme().agora());
+		
+		//acao
+		//executando metodo privado atraves do powermock
+		//lembrando que o mockito tbm possui o Whitebox, mas apenas o do powermock consegue 
+		//executar um metodo privado
+		Double valorLocacao = (Double) Whitebox.invokeMethod(service, "calcularValorLocacao", filmes);
+		
+		//verificacao
+		Assert.assertThat(valorLocacao, CoreMatchers.is(4.0));
+		
 	}
 
 }
