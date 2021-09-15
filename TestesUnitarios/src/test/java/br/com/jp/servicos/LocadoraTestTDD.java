@@ -22,11 +22,15 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ErrorCollector;
 import org.junit.rules.ExpectedException;
+import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
 import br.com.jp.dao.LocacaoDAO;
 import br.com.jp.dao.LocacaoDAOFake;
@@ -41,6 +45,8 @@ import br.com.jp.servicos.builders.UsuarioBuilder;
 import br.com.jp.servicos.matchers.MatchersProprios;
 import br.com.jp.utils.DataUtils;
 
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({LocacaoService.class, DataUtils.class})
 public class LocadoraTestTDD {
 	
 	@InjectMocks
@@ -79,7 +85,10 @@ public class LocadoraTestTDD {
 	@Test
 	public void deveAlugarFilme() throws Exception {
 		//Se o dia da semana for sabado, este teste nao sera executado
-		Assume.assumeFalse(DataUtils.verificarDiaSemana(new Date(), Calendar.SATURDAY));
+		//Assume.assumeFalse(DataUtils.verificarDiaSemana(new Date(), Calendar.SATURDAY));
+		
+		//resolvendo o problema com powermock
+		PowerMockito.whenNew(Date.class).withNoArguments().thenReturn(DataUtils.obterData(28, 4, 2017));
 		
 		//cenario
 		
@@ -171,10 +180,13 @@ public class LocadoraTestTDD {
 	}
 	
 	@Test
-	public void naoDeveDevolverFilmeNoDomingo() throws FilmeSemEstoqueException, LocadoraException {
+	public void naoDeveDevolverFilmeNoDomingo() throws Exception {
 		
 		//Se o dia da semana for sabado, este teste SERA executado
-		Assume.assumeTrue(DataUtils.verificarDiaSemana(new Date(), Calendar.SATURDAY));
+		//Assume.assumeTrue(DataUtils.verificarDiaSemana(new Date(), Calendar.SATURDAY));
+		
+		//utilizando o powermock para setar sempre sabado no date qdo executar este teste
+		PowerMockito.whenNew(Date.class).withNoArguments().thenReturn(DataUtils.obterData(29, 4, 2017));
 		
 		//cenario
 		Filme filme1 = FilmeBuilder.umFilme().agora();
