@@ -55,14 +55,14 @@ public class LocacaoService {
 		Locacao locacao = new Locacao();
 		locacao.setFilmes(filmes);
 		locacao.setUsuario(usuario);
-		locacao.setDataLocacao(Calendar.getInstance().getTime());
+		locacao.setDataLocacao(obterData());
 		
 		Double precoLocacao = calcularValorLocacao(filmes);
 		
 		locacao.setValor(precoLocacao);
 
 		//Entrega no dia seguinte
-		Date dataEntrega = Calendar.getInstance().getTime();
+		Date dataEntrega = obterData();
 		dataEntrega = adicionarDias(dataEntrega, 1);
 		//Se a entrega cair num domingo, deve adicionar +1 dia
 		if(DataUtils.verificarDiaSemana(dataEntrega, Calendar.SUNDAY)) {
@@ -114,10 +114,14 @@ public class LocacaoService {
 		List<Locacao> locacoes = locacaoDao.obterLocacoesPendentes();
 		
 		for (Locacao locacao : locacoes) {
-			if(locacao.getDataRetorno().before(new Date())) {				
+			if(locacao.getDataRetorno().before(obterData())) {				
 				emailService.notificarAtraso(locacao.getUsuario());
 			}
 		}
+	}
+
+	protected Date obterData() {
+		return new Date();
 	}
 	
 	public void prorrogarLocacao(Locacao locacao, int dias) {
@@ -125,7 +129,7 @@ public class LocacaoService {
 		novaLocacao.setUsuario(locacao.getUsuario());
 		novaLocacao.setFilmes(locacao.getFilmes());
 		novaLocacao.setValor(locacao.getValor()*dias);
-		novaLocacao.setDataLocacao(Calendar.getInstance().getTime());
+		novaLocacao.setDataLocacao(obterData());
 		novaLocacao.setDataRetorno(DataUtils.obterDataComDiferencaDias(dias));
 		
 		locacaoDao.salvar(novaLocacao);

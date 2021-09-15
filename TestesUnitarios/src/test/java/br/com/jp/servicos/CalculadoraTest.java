@@ -1,19 +1,30 @@
 package br.com.jp.servicos;
 
 import org.hamcrest.CoreMatchers;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.BlockJUnit4ClassRunner;
 
 import br.com.jp.exceptions.NaoPodeDividirPorZeroException;
+import br.com.jp.runners.ParallelRunner;
 
+@RunWith(ParallelRunner.class)
 public class CalculadoraTest {
 	
 	private Calculadora calc;
 	
 	@Before
 	public void setup() {
+		System.out.println("Iniciando...");
 		calc = new Calculadora();
+	}
+	
+	@After
+	public void end() {
+		System.out.println("Finalizando...");
 	}
 
 	@Test
