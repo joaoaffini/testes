@@ -55,7 +55,7 @@ public class LocacaoService {
 		Locacao locacao = new Locacao();
 		locacao.setFilmes(filmes);
 		locacao.setUsuario(usuario);
-		locacao.setDataLocacao(new Date());
+		locacao.setDataLocacao(Calendar.getInstance().getTime());
 		
 		Double precoLocacao = 0.0;
 		for(int i = 0; i < filmes.size(); i++) {
@@ -87,7 +87,7 @@ public class LocacaoService {
 		locacao.setValor(precoLocacao);
 
 		//Entrega no dia seguinte
-		Date dataEntrega = new Date();
+		Date dataEntrega = Calendar.getInstance().getTime();
 		dataEntrega = adicionarDias(dataEntrega, 1);
 		//Se a entrega cair num domingo, deve adicionar +1 dia
 		if(DataUtils.verificarDiaSemana(dataEntrega, Calendar.SUNDAY)) {
@@ -116,7 +116,7 @@ public class LocacaoService {
 		novaLocacao.setUsuario(locacao.getUsuario());
 		novaLocacao.setFilmes(locacao.getFilmes());
 		novaLocacao.setValor(locacao.getValor()*dias);
-		novaLocacao.setDataLocacao(new Date());
+		novaLocacao.setDataLocacao(Calendar.getInstance().getTime());
 		novaLocacao.setDataRetorno(DataUtils.obterDataComDiferencaDias(dias));
 		
 		locacaoDao.salvar(novaLocacao);
